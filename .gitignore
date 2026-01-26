@@ -1,0 +1,29 @@
+# Build artifacts
+build/
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.lol
+*.loa
+*.idx
+*.ilg
+*.ind
+*.glg
+*.glo
+*.gls
+*.ist
+*.dvi
+*.ps
+
+# Editor settings
+.vscode/
