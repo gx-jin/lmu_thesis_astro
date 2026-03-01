@@ -2,10 +2,19 @@
 %%            LMU Template             %%
 %%                                     %%
 %%         For Creating a              %%
-%%   Dissertation with pdflatex/latex  %%
+%%     Dissertation with LaTeX         %%
 %%                                     %%
-%%  (2002) Robert Dahlke               %%
-%%         & Sigmund Stintzing         %%
+%%  Original (2002) Robert Dahlke      %%
+%%             & Sigmund Stintzing     %%
+%%                                     %%
+%%  Modified (2026) Gaoxiang Jin       %%
+%%    - authoryear citation (natbib)   %%
+%%    - aasjournalv7 bibstyle (AAS)    %%
+%%    - images/ for figures            %%
+%%    - bibstyle/ for .bst files       %%
+%%    - fncychap Sonny chapter style   %%
+%%    - Linux Libertine font           %%
+%%    - 1.3x line spacing (setspace)   %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[12pt]{book}
@@ -18,9 +27,38 @@
 \usepackage{a4wide}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
-% \usepackage{german}
-\usepackage[bookmarks]{hyperref}
-
+\graphicspath{{./images/}}
+% --- Typography ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+\let\Bbbk\relax                 % resolve \Bbbk conflict between amssymb & newtxmath
+\usepackage{libertine}          % Linux Libertine for text
+\usepackage[libertine]{newtxmath} % matching math font for Libertine
+\usepackage{microtype}          % microtypography: better justification, fewer overfull boxes
+\usepackage{setspace}
+\setstretch{1.3}                % 1.3x line spacing throughout
+\setlength{\headheight}{14.5pt} % required by fancyhdr
+% --- Tables & captions ---
+\usepackage{booktabs}           % professional table rules (\toprule/\midrule/\bottomrule)
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption} % bold "Fig. 1." + small text
+% --- Chapter style ---
+\usepackage[Sonny]{fncychap}    % Sonny: large chapter number + horizontal rule
+% --- Hyperlinks (color links, print-friendly) ---
+\usepackage{xcolor}
+\definecolor{linkblue}{rgb}{0.1,0.2,0.6}
+\definecolor{citegreen}{rgb}{0.0,0.4,0.2}
+\definecolor{urlteal}{rgb}{0.0,0.35,0.5}
+\usepackage[colorlinks=true,
+            linkcolor=linkblue,
+            citecolor=citegreen,
+            urlcolor=urlteal,
+            bookmarks=true]{hyperref}
+\usepackage[authoryear,round]{natbib}
+% Override aasjournalv7 link commands: show compact hyperlinked label instead of full URL
+\newcommand{\dodoi}[1]{\href{https://doi.org/#1}{doi:#1}}
+\newcommand{\doarXiv}[1]{\href{https://arxiv.org/abs/#1}{arXiv:#1}}
+\newcommand{\doeprint}[1]{\href{http://ascl.net/#1}{ascl:#1}}
+\newcommand{\ion}[2]{#1~\textsc{\lowercase{#2}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ADS Journal Abbreviation Macros   %%
@@ -30,8 +68,6 @@
 \newcommand{\apj}{ApJ}                    % Astrophysical Journal
 \newcommand{\apjl}{ApJL}                  % Astrophysical Journal Letters
 \newcommand{\apjs}{ApJS}                  % Astrophysical Journal Supplement Series
-\newcommand{\apjlett}{ApJL}               % Astrophysical Journal Letters (alternative)
-\newcommand{\apjsupp}{ApJS}               % Astrophysical Journal Supplement (alternative)
 \newcommand{\aj}{AJ}                      % Astronomical Journal
 \newcommand{\mnras}{MNRAS}                % Monthly Notices of the Royal Astronomical Society
 \newcommand{\aap}{A\&A}                   % Astronomy and Astrophysics
@@ -81,16 +117,19 @@
 %% Definition of Header     %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\pagestyle{fancyplain}
-\renewcommand{\chaptermark}[1]%
-         {\markboth{\thechapter.\ #1}{}}
-\renewcommand{\sectionmark}[1]%
-         {\markright{\thesection\ #1}}
-\lhead[\fancyplain{}{\bfseries\thepage}]%
-    {\fancyplain{}{\bfseries\rightmark}}
-\rhead[\fancyplain{}{\bfseries\leftmark}]%
-    {\fancyplain{}{\bfseries\thepage}}
-\cfoot{}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{}
+\fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[RE]{\bfseries\leftmark}
+\fancyhead[LO]{\bfseries\rightmark}
+% Chapter opening pages: no header, page number centered at bottom
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -179,18 +218,22 @@
 
   \frontmatter
 
-
+  % Temporarily revert to Computer Modern for the cover pages (LMU requirement)
+  {%
+  \renewcommand{\rmdefault}{cmr}%
+  \renewcommand{\sfdefault}{cmss}%
+  \normalfont
   \LMUTitle
-      {Thesis Title\\
-       Optional Subtitle}               % Title of the work
-      {Author Name}                     % First and last name of the author
-      {Place of Birth}                  % Place of birth of the author
-      {Fakultät für Physik}             % Name of the faculty
-      {Munich 20XX}                     % Place and year of creation
-      {Submission Date}                 % Date of submission
-      {First Reviewer}                  % Name of the first reviewer
-      {Second Reviewer}                 % Name of the second reviewer
-      {Oral Examination Date}           % Date of the oral examination
+      {Thesis Title Goes Here}             % Title of the work
+      {Firstname Lastname}                 % First and last name of the author
+      {City, Country}                      % Place of birth of the author
+      {Fakult\"at f\"ur Physik}            % Name of the faculty
+      {Munich 20XX}                        % Place and year of creation
+      {DD. Month YYYY}                     % Date of submission
+      {Prof. Dr. First Reviewer}           % Name of the first reviewer
+      {Prof. Dr. Second Reviewer}          % Name of the second reviewer
+      {DD. Month YYYY}                     % Date of the oral examination
+  }% end CM font group
 
 
   \tableofcontents
@@ -210,7 +253,7 @@
   \include{abstract}
 
 
-  \mainmatter\setcounter{page}{1}
+  \mainmatter
   \include{chapter_01}
   \include{chapter_02}
   %\include{chapter_03}
